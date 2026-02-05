@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Convex generated/compiled files
+convex/_generated/
+convex/*.js
+convex/*.d.ts
+convex/*.d.ts.map
+
+# OS files
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Test coverage
+coverage/

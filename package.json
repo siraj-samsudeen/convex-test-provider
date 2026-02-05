@@ -1,0 +1,51 @@
+{
+  "name": "convex-test-provider",
+  "version": "0.1.0",
+  "description": "React provider that adapts convex-test's one-shot client for use with ConvexProvider, so useQuery/useMutation work in tests.",
+  "license": "MIT",
+  "keywords": [
+    "convex",
+    "testing",
+    "react",
+    "provider",
+    "convex-test"
+  ],
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "convex": ">=1.0.0",
+    "convex-test": ">=0.0.1",
+    "react": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.2.10",
+    "@vitejs/plugin-react": "^5.1.3",
+    "convex": "^1.31.7",
+    "convex-test": "^0.0.41",
+    "jsdom": "^28.0.0",
+    "react": "^19.2.4",
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.18"
+  }
+}

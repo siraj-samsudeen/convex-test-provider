@@ -1,0 +1,15 @@
+# Source files (dist is published, not src)
+src/
+
+# Test infrastructure
+convex/
+vitest.config.ts
+**/*.test.*
+**/test-setup.*
+
+# Config files
+tsconfig.json
+
+# Dev files
+.git/
+.gitignore
