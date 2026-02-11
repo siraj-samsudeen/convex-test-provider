@@ -19,6 +19,20 @@ import schema from "../convex/schema";
 import { modules } from "../convex/test.setup";
 import { ConvexTestProvider } from "./ConvexTestProvider";
 
+function TwoQueries() {
+  const items = useQuery(api.items.list);
+  const todos = useQuery(api.todos.list);
+
+  if (items === undefined || todos === undefined) return <div>Loading</div>;
+
+  return (
+    <div>
+      <div>items:{items.length}</div>
+      <div>todos:{todos.length}</div>
+    </div>
+  );
+}
+
 function QueryOnly() {
   const items = useQuery(api.items.list);
   if (items === undefined) return <div>Loading</div>;
@@ -114,5 +128,32 @@ describe("ConvexTestProvider", () => {
 
     expect(await screen.findByText("A")).toBeInTheDocument();
     expect(screen.getByText("B")).toBeInTheDocument();
+  });
+
+  it("supports multiple useQuery calls without cache collisions", async () => {
+    const client = convexTest(schema, modules);
+
+    const userId = await client.run(async (ctx) => {
+      const newUserId = await ctx.db.insert("users", {});
+      await ctx.db.insert("items", { text: "Item 1" });
+      await ctx.db.insert("items", { text: "Item 2" });
+      await ctx.db.insert("todos", {
+        text: "Todo 1",
+        completed: false,
+        userId: newUserId,
+      });
+      return newUserId;
+    });
+
+    const authedClient = client.withIdentity({ subject: userId });
+
+    render(
+      <ConvexTestProvider client={authedClient}>
+        <TwoQueries />
+      </ConvexTestProvider>,
+    );
+
+    expect(await screen.findByText("items:2")).toBeInTheDocument();
+    expect(await screen.findByText("todos:1")).toBeInTheDocument();
   });
 });
