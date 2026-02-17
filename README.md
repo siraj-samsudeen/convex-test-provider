@@ -105,6 +105,36 @@ export const test = createConvexTest(schema, modules, {
 - `wrapWithConvex(children, client)` — JSX wrapper for custom rendering
 - `renderWithConvex(ui, client)` — Testing Library render with Convex provider
 
+## Auth Testing
+
+Test components that use `<Authenticated>`, `<Unauthenticated>`, `useConvexAuth()`, and `useAuthActions()` — without mocking.
+
+```bash
+npm i -D @convex-dev/auth
+```
+
+```tsx
+import { renderWithConvexAuth } from "convex-test-provider";
+
+// Authenticated (default) — <Authenticated> children render
+renderWithConvexAuth(<App />, client);
+
+// Unauthenticated — <Unauthenticated> children render
+renderWithConvexAuth(<App />, client, { authenticated: false });
+```
+
+`renderWithConvexAuth` wraps your component with both auth state (so `<Authenticated>`, `<Unauthenticated>`, and `useConvexAuth()` work) and auth actions context (so `useAuthActions()` doesn't throw). The `signIn`/`signOut` actions are no-ops — test the auth ceremony with Playwright e2e.
+
+For custom wrapping, use `ConvexTestAuthProvider` directly:
+
+```tsx
+import { ConvexTestAuthProvider } from "convex-test-provider";
+
+<ConvexTestAuthProvider client={client} authenticated={true}>
+  <YourComponent />
+</ConvexTestAuthProvider>
+```
+
 ## Types
 
 The `client` prop accepts any object with `query(ref, args)` and `mutation(ref, args)` returning promises. The result of `convexTest(schema, modules)` (and `.withIdentity(...)`) satisfies this.
