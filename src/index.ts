@@ -1,2 +1,8 @@
 export { ConvexTestProvider, type ConvexTestClient } from "./ConvexTestProvider.js";
-export { createConvexTest, wrapWithConvex, renderWithConvex } from "./helpers.js";
+export { ConvexTestAuthProvider } from "./ConvexTestAuthProvider.js";
+export {
+  createConvexTest,
+  wrapWithConvex,
+  renderWithConvex,
+  renderWithConvexAuth,
+} from "./helpers.js";

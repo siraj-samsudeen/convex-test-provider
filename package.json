@@ -1,6 +1,6 @@
 {
   "name": "convex-test-provider",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "React provider that adapts convex-test's one-shot client for use with ConvexProvider, so useQuery/useMutation work in tests.",
   "license": "MIT",
   "keywords": [
@@ -27,20 +27,29 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./vitest-plugin": {
+      "types": "./dist/vitest-plugin.d.ts",
+      "import": "./dist/vitest-plugin.js",
+      "default": "./dist/vitest-plugin.js"
     }
   },
   "files": [
     "dist"
   ],
   "peerDependencies": {
+    "@convex-dev/auth": ">=0.0.80",
+    "@testing-library/react": ">=14.0.0",
     "convex": ">=1.0.0",
     "convex-test": ">=0.0.1",
     "react": ">=18.0.0",
-    "vitest": ">=1.0.0",
-    "@testing-library/react": ">=14.0.0"
+    "vitest": ">=1.0.0"
   },
   "peerDependenciesMeta": {
     "@testing-library/react": {
+      "optional": true
+    },
+    "@convex-dev/auth": {
       "optional": true
     }
   },
@@ -50,10 +59,12 @@
     "test:watch": "vitest"
   },
   "devDependencies": {
+    "@convex-dev/auth": "^0.0.90",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^25.2.3",
     "@types/react": "^19.2.10",
     "@vitejs/plugin-react": "^5.1.3",
     "convex": "^1.31.7",

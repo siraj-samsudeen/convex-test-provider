@@ -105,6 +105,74 @@ export const test = createConvexTest(schema, modules, {
 - `wrapWithConvex(children, client)` — JSX wrapper for custom rendering
 - `renderWithConvex(ui, client)` — Testing Library render with Convex provider
 
+## Auth Testing
+
+Test components that use `<Authenticated>`, `<Unauthenticated>`, `useConvexAuth()`, and `useAuthActions()` — without mocking.
+
+```bash
+npm i -D @convex-dev/auth
+```
+
+```tsx
+import { renderWithConvexAuth } from "convex-test-provider";
+
+// Authenticated (default) — <Authenticated> children render
+renderWithConvexAuth(<App />, client);
+
+// Unauthenticated — <Unauthenticated> children render
+renderWithConvexAuth(<App />, client, { authenticated: false });
+```
+
+`renderWithConvexAuth` wraps your component with both auth state (so `<Authenticated>`, `<Unauthenticated>`, and `useConvexAuth()` work) and auth actions context (so `useAuthActions()` works). Calling `signIn()` sets auth to true; calling `signOut()` sets auth to false — the view re-renders accordingly.
+
+```tsx
+// Test sign-out toggles the view
+renderWithConvexAuth(<App />, client);
+await user.click(screen.getByRole("button", { name: /sign out/i }));
+expect(screen.getByText("Please sign in")).toBeInTheDocument();
+```
+
+To simulate sign-in errors (e.g. test `.catch()` branches):
+
+```tsx
+renderWithConvexAuth(<App />, client, {
+  authenticated: false,
+  signInError: new Error("Invalid credentials"),
+});
+```
+
+For custom wrapping, use `ConvexTestAuthProvider` directly:
+
+```tsx
+import { ConvexTestAuthProvider } from "convex-test-provider";
+
+<ConvexTestAuthProvider client={client} authenticated={true}>
+  <YourComponent />
+</ConvexTestAuthProvider>
+```
+
+## Limitations
+
+### One-shot query execution (non-reactive)
+
+Queries resolve **once** at component mount. After a mutation, the UI does not automatically re-render with updated data — this adapter does not simulate Convex's reactive subscription model.
+
+To verify backend state after a mutation, query directly:
+
+```tsx
+await user.click(screen.getByRole("button", { name: "Add" }));
+const items = await client.query(api.items.list, {});
+expect(items).toHaveLength(1);
+```
+
+To see updated data in the UI, unmount and remount the component (or call `rerender`).
+
+### Nested `runQuery`/`runMutation` lose auth context
+
+When a Convex function calls `ctx.runQuery()` or `ctx.runMutation()`, the nested call does not inherit the caller's auth identity. This is an [upstream limitation in convex-test](https://github.com/get-convex/convex-test), not in this package.
+
+**Workaround:** Avoid nested `runQuery`/`runMutation` in functions under test, or pass the user ID as an explicit argument instead of relying on `ctx.auth.getUserIdentity()` inside nested calls.
+
 ## Types
 
 The `client` prop accepts any object with `query(ref, args)` and `mutation(ref, args)` returning promises. The result of `convexTest(schema, modules)` (and `.withIdentity(...)`) satisfies this.
