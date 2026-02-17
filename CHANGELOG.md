@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Cache collision when multiple `useQuery` calls share a component — different query references (e.g. `api.items.list` and `api.todos.list`) now get separate cache entries instead of overwriting each other (#2)
+- `seed` fixture now respects explicit `userId` in data instead of always overwriting with the default user (#8)
+- `createUser` now exposes `userId` on the returned client for multi-user test scenarios (#8)
 
 ### Changed
 

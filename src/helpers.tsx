@@ -14,7 +14,7 @@ interface ConvexTestFixtures {
   userId: string;
   client: any;
   seed: (table: string, data: Record<string, unknown>) => Promise<string>;
-  createUser: () => Promise<any>;
+  createUser: () => Promise<any & { userId: string }>;
 }
 
 const dbInsert = (client: any, table: string, data: Record<string, unknown>) =>
@@ -45,14 +45,15 @@ export function createConvexTest(
 
     seed: async ({ testClient, userId }, use) => {
       const seedFn = (table: string, data: Record<string, unknown>) =>
-        dbInsert(testClient, table, { ...data, userId });
+        dbInsert(testClient, table, { userId, ...data });
       await use(seedFn);
     },
 
     createUser: async ({ testClient }, use) => {
       const createUserFn = async () => {
         const newUserId = await dbInsert(testClient, usersTable, {});
-        return testClient.withIdentity({ subject: newUserId });
+        const userClient = testClient.withIdentity({ subject: newUserId });
+        return Object.assign(userClient, { userId: newUserId });
       };
       await use(createUserFn);
     },

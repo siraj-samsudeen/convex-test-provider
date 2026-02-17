@@ -33,4 +33,39 @@ describe("createConvexTest fixtures", () => {
     const todos = await testClient.query(api.todos.list, {});
     expect(todos).toHaveLength(0);
   });
+
+  test("seed respects explicit userId", async ({ testClient, seed, userId }) => {
+    const otherUserId = await testClient.run((ctx: any) =>
+      ctx.db.insert("users", {})
+    );
+    await seed("todos", { text: "Other's todo", completed: false, userId: otherUserId });
+
+    // Verify the record has the explicit userId, not the default
+    const allTodos = await testClient.run((ctx: any) => ctx.db.query("todos").collect());
+    expect(allTodos).toHaveLength(1);
+    expect(allTodos[0].userId).toBe(otherUserId);
+    expect(allTodos[0].userId).not.toBe(userId);
+  });
+
+  test("createUser exposes userId", async ({ createUser }) => {
+    const bob = await createUser();
+    expect(bob.userId).toBeDefined();
+    expect(typeof bob.userId).toBe("string");
+  });
+
+  test("multi-user data isolation", async ({ client, seed, createUser }) => {
+    const bob = await createUser();
+
+    // Seed a todo for bob
+    await seed("todos", { text: "Bob's todo", completed: false, userId: bob.userId });
+
+    // Default user (client) should not see bob's todo
+    const myTodos = await client.query(api.todos.list, {});
+    expect(myTodos).toHaveLength(0);
+
+    // Bob should see his own todo
+    const bobTodos = await bob.query(api.todos.list, {});
+    expect(bobTodos).toHaveLength(1);
+    expect(bobTodos[0].text).toBe("Bob's todo");
+  });
 });
