@@ -1,5 +1,5 @@
 {
-  "name": "convex-test-provider",
+  "name": "feather-testing-convex",
   "version": "0.4.0",
   "description": "React provider that adapts convex-test's one-shot client for use with ConvexProvider, so useQuery/useMutation work in tests.",
   "license": "MIT",
@@ -12,12 +12,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/siraj-samsudeen/convex-test-provider.git"
+    "url": "git+https://github.com/siraj-samsudeen/feather-testing-convex.git"
   },
   "bugs": {
-    "url": "https://github.com/siraj-samsudeen/convex-test-provider/issues"
+    "url": "https://github.com/siraj-samsudeen/feather-testing-convex/issues"
   },
-  "homepage": "https://github.com/siraj-samsudeen/convex-test-provider#readme",
+  "homepage": "https://github.com/siraj-samsudeen/feather-testing-convex#readme",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",

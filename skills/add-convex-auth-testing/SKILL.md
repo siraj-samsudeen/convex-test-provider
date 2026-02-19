@@ -13,7 +13,7 @@ Enables testing components that use `<Authenticated>`, `<Unauthenticated>`, `use
 
 ## When to Use
 
-- Project already has `convex-test-provider` set up
+- Project already has `feather-testing-convex` set up
 - Components use Convex auth hooks/components and need tests
 
 ---
@@ -32,7 +32,7 @@ npm install -D @convex-dev/auth
 // vitest.config.ts
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
-import { convexTestProviderPlugin } from "convex-test-provider/vitest-plugin";
+import { convexTestProviderPlugin } from "feather-testing-convex/vitest-plugin";
 
 export default defineConfig({
   plugins: [
@@ -56,7 +56,7 @@ export default defineConfig({
 ```typescript
 // convex/test.setup.ts
 /// <reference types="vite/client" />
-import { createConvexTest, renderWithConvex, renderWithConvexAuth } from "convex-test-provider";
+import { createConvexTest, renderWithConvex, renderWithConvexAuth } from "feather-testing-convex";
 import schema from "./schema";
 
 export const modules = import.meta.glob("./**/!(*.*.*)*.*s");
@@ -138,7 +138,7 @@ test("shows error on failed sign-in", async ({ client }) => {
 ### Direct `ConvexTestAuthProvider` (custom wrapping)
 
 ```tsx
-import { ConvexTestAuthProvider } from "convex-test-provider";
+import { ConvexTestAuthProvider } from "feather-testing-convex";
 
 <ConvexTestAuthProvider client={client} authenticated={true} signInError={someError}>
   <YourComponent />
@@ -177,6 +177,6 @@ Auth tests should pass. If you see `ERR_PACKAGE_PATH_NOT_EXPORTED`, the vitest p
 ## Common Mistakes to Avoid
 
 - **Missing vitest plugin** → `[ERR_PACKAGE_PATH_NOT_EXPORTED]` error from Vite. Add `convexTestProviderPlugin()` to your vitest.config.ts plugins.
-- **Importing vitest plugin in test files** → The plugin is for `vitest.config.ts` only, not test files. In tests, import `renderWithConvexAuth` from `convex-test-provider`.
+- **Importing vitest plugin in test files** → The plugin is for `vitest.config.ts` only, not test files. In tests, import `renderWithConvexAuth` from `feather-testing-convex`.
 - **Using `signIn`/`signOut` without `renderWithConvexAuth`** → Only `ConvexTestAuthProvider` (used internally by `renderWithConvexAuth`) wires up the auth actions context. Plain `ConvexTestProvider` doesn't provide it.
 - **Expecting `signIn()` to trigger backend auth** → `signIn`/`signOut` only toggle the local auth state for UI testing. They don't call real auth endpoints.

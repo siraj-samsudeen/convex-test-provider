@@ -1,10 +1,10 @@
 # Helper Functions Specification
 
-> GitHub Issue: [#1](https://github.com/siraj-samsudeen/convex-test-provider/issues/1)
+> GitHub Issue: [#1](https://github.com/siraj-samsudeen/feather-testing-convex/issues/1)
 
 ## Overview
 
-Add helper functions to `convex-test-provider` that reduce test boilerplate from ~15 lines to ~2 lines per test.
+Add helper functions to `feather-testing-convex` that reduce test boilerplate from ~15 lines to ~2 lines per test.
 
 ---
 

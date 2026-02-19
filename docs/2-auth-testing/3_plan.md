@@ -1,7 +1,7 @@
 # Auth Testing Implementation Plan
 
-> GitHub Issue: [#4](https://github.com/siraj-samsudeen/convex-test-provider/issues/4)
-> Package repo: `/Users/siraj/Desktop/NonDropBoxProjects/convex-test-provider`
+> GitHub Issue: [#4](https://github.com/siraj-samsudeen/feather-testing-convex/issues/4)
+> Package repo: `/Users/siraj/Desktop/NonDropBoxProjects/feather-testing-convex`
 
 ## Goal
 

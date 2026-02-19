@@ -65,7 +65,7 @@ gh pr create --title "feat: description" --body "Closes #N
 ## Project Structure
 
 ```
-convex-test-provider/
+feather-testing-convex/
 ├── CLAUDE.md              ← You are here (auto-read by Claude Code)
 ├── CONTRIBUTING.md        ← Workflow details
 ├── docs/
@@ -81,4 +81,4 @@ convex-test-provider/
 
 | Issue | Folder | Status |
 |-------|--------|--------|
-| [#1 Helper Functions](https://github.com/siraj-samsudeen/convex-test-provider/issues/1) | `docs/1-helper-functions/` | Plan ready, awaiting execution |
+| [#1 Helper Functions](https://github.com/siraj-samsudeen/feather-testing-convex/issues/1) | `docs/1-helper-functions/` | Plan ready, awaiting execution |

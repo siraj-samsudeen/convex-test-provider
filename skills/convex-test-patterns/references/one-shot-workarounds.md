@@ -2,7 +2,7 @@
 
 ## Why Queries Don't Re-Run
 
-`convex-test-provider` runs each query **once** when the component mounts. It does not simulate Convex's reactive subscription model. After a mutation, the UI does not automatically re-render with updated data.
+`feather-testing-convex` runs each query **once** when the component mounts. It does not simulate Convex's reactive subscription model. After a mutation, the UI does not automatically re-render with updated data.
 
 This is a deliberate design tradeoff — the in-memory `convex-test` client doesn't support live subscriptions.
 
@@ -63,7 +63,7 @@ test("rerender shows updated data", async ({ client }) => {
 
 ## When to Use Layer 3 Instead
 
-If your tests fundamentally need reactive queries (live subscription updates after mutations), use a real local backend instead of `convex-test-provider`.
+If your tests fundamentally need reactive queries (live subscription updates after mutations), use a real local backend instead of `feather-testing-convex`.
 
 ### Quick Setup
 
@@ -86,7 +86,7 @@ render(
 
 ### Tradeoffs
 
-| | convex-test-provider | Real local backend |
+| | feather-testing-convex | Real local backend |
 |---|---|---|
 | Reactive queries | No (one-shot) | Yes (live subscriptions) |
 | Speed | Fast (in-memory) | Slower (real backend) |
@@ -94,4 +94,4 @@ render(
 | CI | Simple | Needs backend binary in CI |
 | Mutations | Work, but UI doesn't update | Work, UI updates reactively |
 
-**Recommendation:** Use `convex-test-provider` for most tests. Use Layer 3 only for critical end-to-end flows that require observing reactive updates.
+**Recommendation:** Use `feather-testing-convex` for most tests. Use Layer 3 only for critical end-to-end flows that require observing reactive updates.

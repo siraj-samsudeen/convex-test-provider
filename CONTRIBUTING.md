@@ -1,4 +1,4 @@
-# Contributing to convex-test-provider
+# Contributing to feather-testing-convex
 
 ## Development Workflow
 
@@ -47,7 +47,7 @@ Template:
 ```markdown
 # Feature Name Research
 
-> GitHub Issue: [#N](https://github.com/siraj-samsudeen/convex-test-provider/issues/N)
+> GitHub Issue: [#N](https://github.com/siraj-samsudeen/feather-testing-convex/issues/N)
 
 ## Context
 [What problem are we solving?]
@@ -78,7 +78,7 @@ Template:
 ```markdown
 # Feature Name Specification
 
-> GitHub Issue: [#N](https://github.com/siraj-samsudeen/convex-test-provider/issues/N)
+> GitHub Issue: [#N](https://github.com/siraj-samsudeen/feather-testing-convex/issues/N)
 
 ## Overview
 [Brief description]

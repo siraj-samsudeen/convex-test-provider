@@ -1,7 +1,7 @@
 # Helper Functions Implementation Plan
 
-> GitHub Issue: [#1](https://github.com/siraj-samsudeen/convex-test-provider/issues/1)
-> Package repo: `/Users/siraj/Desktop/NonDropBoxProjects/convex-test-provider`
+> GitHub Issue: [#1](https://github.com/siraj-samsudeen/feather-testing-convex/issues/1)
+> Package repo: `/Users/siraj/Desktop/NonDropBoxProjects/feather-testing-convex`
 
 ## Goal
 
@@ -11,7 +11,7 @@ Add helper functions to reduce test boilerplate from ~15 lines to ~2 lines per t
 
 ```typescript
 // Project setup (one time in convex/test.setup.ts)
-import { createConvexTest, renderWithConvex } from "convex-test-provider";
+import { createConvexTest, renderWithConvex } from "feather-testing-convex";
 import schema from "./schema";
 
 export const modules = import.meta.glob("./**/!(*.*.*)*.*s");

@@ -1,6 +1,6 @@
 # Auth Testing Spec
 
-> GitHub Issue: [#4](https://github.com/siraj-samsudeen/convex-test-provider/issues/4)
+> GitHub Issue: [#4](https://github.com/siraj-samsudeen/feather-testing-convex/issues/4)
 
 ## Requirements
 

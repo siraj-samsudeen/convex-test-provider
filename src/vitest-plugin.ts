@@ -15,7 +15,7 @@ import { resolve } from "node:path";
  *
  * @example
  * ```ts
- * import { convexTestProviderPlugin } from "convex-test-provider/vitest-plugin";
+ * import { convexTestProviderPlugin } from "feather-testing-convex/vitest-plugin";
  *
  * export default defineConfig({
  *   plugins: [convexTestProviderPlugin()],
@@ -38,7 +38,7 @@ export function convexTestProviderPlugin() {
   const resolved = resolve(authRoot, "dist/react/client.js");
 
   return {
-    name: "convex-test-provider",
+    name: "feather-testing-convex",
     config() {
       return {
         resolve: {

@@ -1,10 +1,10 @@
 # Helper Functions Research
 
-> GitHub Issue: [#1](https://github.com/siraj-samsudeen/convex-test-provider/issues/1)
+> GitHub Issue: [#1](https://github.com/siraj-samsudeen/feather-testing-convex/issues/1)
 
 ## Context
 
-Phase 2 of convex-test-provider: ship helper functions to reduce test boilerplate. The goal is to bring the best ideas from Phoenix LiveView, RSpec, and modern JS testing to Convex.
+Phase 2 of feather-testing-convex: ship helper functions to reduce test boilerplate. The goal is to bring the best ideas from Phoenix LiveView, RSpec, and modern JS testing to Convex.
 
 ### The Problem
 
@@ -98,9 +98,9 @@ render(
 
 | Option | Import | Decision |
 |--------|--------|----------|
-| `/testing` | `from "convex-test-provider/testing"` | Rejected — adds complexity |
-| `/helpers` | `from "convex-test-provider/helpers"` | Rejected — adds complexity |
-| Main export | `from "convex-test-provider"` | **Chosen** — simpler mental model |
+| `/testing` | `from "feather-testing-convex/testing"` | Rejected — adds complexity |
+| `/helpers` | `from "feather-testing-convex/helpers"` | Rejected — adds complexity |
+| Main export | `from "feather-testing-convex"` | **Chosen** — simpler mental model |
 
 **Why main export:** One package, one import. The component and helpers are part of the same testing story.
 
@@ -162,7 +162,7 @@ A: `@testing-library/react` is an optional peer dependency. Without it, use `wra
 
 ```typescript
 // convex/test.setup.ts
-import { createConvexTest, renderWithConvex } from "convex-test-provider";
+import { createConvexTest, renderWithConvex } from "feather-testing-convex";
 import schema from "./schema";
 
 export const modules = import.meta.glob("./**/!(*.*.*)*.*s");

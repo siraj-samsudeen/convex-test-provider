@@ -9,7 +9,7 @@ metadata:
 
 # Set Up Convex Testing
 
-Sets up integration testing for React + Convex + Vite using [convex-test-provider](https://www.npmjs.com/package/convex-test-provider). Tests React components with real Convex backend execution — no mocking, no running a local backend.
+Sets up integration testing for React + Convex + Vite using [feather-testing-convex](https://www.npmjs.com/package/feather-testing-convex). Tests React components with real Convex backend execution — no mocking, no running a local backend.
 
 ## When to Use
 
@@ -25,7 +25,7 @@ Working tree must be clean before starting. Commit all setup changes together wh
 ## 1. Install Dependencies
 
 ```bash
-npm install -D convex-test convex-test-provider @testing-library/react @testing-library/jest-dom @testing-library/user-event jsdom @vitejs/plugin-react
+npm install -D convex-test feather-testing-convex @testing-library/react @testing-library/jest-dom @testing-library/user-event jsdom @vitejs/plugin-react
 ```
 
 ## 2. Create `vitest.config.ts`
@@ -56,7 +56,7 @@ import "@testing-library/jest-dom/vitest";
 
 ```typescript
 /// <reference types="vite/client" />
-import { createConvexTest, renderWithConvex } from "convex-test-provider";
+import { createConvexTest, renderWithConvex } from "feather-testing-convex";
 import schema from "./schema";
 
 export const modules = import.meta.glob("./**/!(*.*.*)*.*s");

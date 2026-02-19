@@ -1,4 +1,4 @@
-# convex-test-provider
+# feather-testing-convex
 
 React provider that adapts [convex-test](https://www.npmjs.com/package/convex-test)'s one-shot query/mutation client for use with Convex's `ConvexProvider`, so `useQuery` and `useMutation` work in tests against an in-memory backend.
 
@@ -6,7 +6,7 @@ React provider that adapts [convex-test](https://www.npmjs.com/package/convex-te
 
 ```bash
 npm i convex convex-test react
-npm i -D convex-test-provider
+npm i -D feather-testing-convex
 ```
 
 ## Quick Start
@@ -35,7 +35,7 @@ export default defineConfig({
 
 ```typescript
 /// <reference types="vite/client" />
-import { createConvexTest, renderWithConvex } from "convex-test-provider";
+import { createConvexTest, renderWithConvex } from "feather-testing-convex";
 import schema from "./schema";
 
 export const modules = import.meta.glob("./**/!(*.*.*)*.*s");
@@ -77,7 +77,7 @@ For auth testing, see [Auth Testing](#auth-testing) below.
 
 ```tsx
 import { convexTest } from "convex-test";
-import { ConvexTestProvider } from "convex-test-provider";
+import { ConvexTestProvider } from "feather-testing-convex";
 import schema from "./convex/schema";
 import { modules } from "./convex/test.setup";
 
@@ -104,7 +104,7 @@ Create a test setup file in your Convex directory:
 
 ```typescript
 // convex/test.setup.ts
-import { createConvexTest, renderWithConvex } from "convex-test-provider";
+import { createConvexTest, renderWithConvex } from "feather-testing-convex";
 import schema from "./schema";
 
 export const modules = import.meta.glob("./**/!(*.*.*)*.*s");
@@ -187,7 +187,7 @@ Add the vitest plugin to resolve an internal `@convex-dev/auth` import ([upstrea
 
 ```typescript
 // vitest.config.ts
-import { convexTestProviderPlugin } from "convex-test-provider/vitest-plugin";
+import { convexTestProviderPlugin } from "feather-testing-convex/vitest-plugin";
 
 export default defineConfig({
   plugins: [
@@ -201,7 +201,7 @@ export default defineConfig({
 ### Usage
 
 ```tsx
-import { renderWithConvexAuth } from "convex-test-provider";
+import { renderWithConvexAuth } from "feather-testing-convex";
 
 // Authenticated (default) — <Authenticated> children render
 renderWithConvexAuth(<App />, client);
@@ -241,7 +241,7 @@ renderWithConvexAuth(<App />, client, {
 ### Direct `ConvexTestAuthProvider` (custom wrapping)
 
 ```tsx
-import { ConvexTestAuthProvider } from "convex-test-provider";
+import { ConvexTestAuthProvider } from "feather-testing-convex";
 
 <ConvexTestAuthProvider client={client} authenticated={true}>
   <YourComponent />
@@ -273,7 +273,7 @@ export default defineConfig({
 ```typescript
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
-import { convexTestProviderPlugin } from "convex-test-provider/vitest-plugin";
+import { convexTestProviderPlugin } from "feather-testing-convex/vitest-plugin";
 
 export default defineConfig({
   plugins: [react(), convexTestProviderPlugin()],
@@ -303,7 +303,7 @@ export default defineConfig({
 Install skills for AI coding agents via [skills.sh](https://skills.sh):
 
 ```bash
-npx skills add siraj-samsudeen/convex-test-provider
+npx skills add siraj-samsudeen/feather-testing-convex
 ```
 
 This installs three skills: `setup-convex-testing`, `add-convex-auth-testing`, and `convex-test-patterns`.
