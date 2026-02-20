@@ -1,6 +1,6 @@
 {
   "name": "feather-testing-convex",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "React provider that adapts convex-test's one-shot client for use with ConvexProvider, so useQuery/useMutation work in tests.",
   "license": "MIT",
   "keywords": [
