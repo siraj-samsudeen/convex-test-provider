@@ -1,33 +1,43 @@
 ---
 name: add-convex-auth-testing
-description: Add auth testing to an existing Convex test setup. Test <Authenticated>, <Unauthenticated>, useConvexAuth(), useAuthActions(), signIn/signOut.
+description: "Checklist: Can tests use <Authenticated>, useConvexAuth(), useAuthActions()? Verify or add vitest plugin, renderWithConvexAuth export, @convex-dev/auth dep."
 license: MIT
 metadata:
   author: siraj-samsudeen
-  version: "0.3"
+  version: "0.4"
 ---
 
-# Add Auth Testing to Convex Tests
+# Add Convex Auth Testing
 
-Enables testing components that use `<Authenticated>`, `<Unauthenticated>`, `useConvexAuth()`, and `useAuthActions()` — without mocking. Requires basic testing to already be set up (see `/setup-convex-testing`).
+Verify or add auth testing support. Enables testing components that use `<Authenticated>`, `<Unauthenticated>`, `useConvexAuth()`, and `useAuthActions()` — without mocking.
 
-## When to Use
+**Dual-purpose:** Use this checklist to add auth testing from scratch OR to fix auth-related test failures.
 
-- Project already has `feather-testing-convex` set up
-- Components use Convex auth hooks/components and need tests
+**Prerequisite:** Basic testing must already be set up (see `setup-convex-testing`).
 
 ---
 
-## 1. Install
+## Checklist
 
+### ☐ 1. @convex-dev/auth installed
+
+**Check:**
+```bash
+npm ls @convex-dev/auth
+```
+
+**If missing:**
 ```bash
 npm install -D @convex-dev/auth
 ```
 
-## 2. Add Vitest Plugin
+### ☐ 2. Vitest plugin added
+
+**Check:** `vitest.config.ts` includes `convexTestProviderPlugin()` in plugins array.
 
 `ConvexTestAuthProvider` imports from an internal `@convex-dev/auth` path. The plugin adds a resolve alias so Vite can find it.
 
+**If missing, update vitest.config.ts:**
 ```typescript
 // vitest.config.ts
 import { defineConfig } from "vitest/config";
@@ -51,8 +61,13 @@ export default defineConfig({
 
 > Upstream fix requested: [convex-auth#281](https://github.com/get-convex/convex-auth/issues/281). Plugin can be removed once the context is publicly exported.
 
-## 3. Update Test Setup
+**Common error:** `ERR_PACKAGE_PATH_NOT_EXPORTED` → plugin is missing.
 
+### ☐ 3. renderWithConvexAuth exported from test setup
+
+**Check:** `convex/test.setup.ts` exports `renderWithConvexAuth`.
+
+**If missing, update convex/test.setup.ts:**
 ```typescript
 // convex/test.setup.ts
 /// <reference types="vite/client" />
@@ -64,15 +79,31 @@ export const test = createConvexTest(schema, modules);
 export { renderWithConvex, renderWithConvexAuth };
 ```
 
-## 4. Usage
+### ☐ 4. Auth tests work
 
-| Scenario | Example below |
-|----------|---------------|
-| Component assumes logged in | Authenticated |
-| Component shows login prompt | Unauthenticated |
-| Test sign-out flow | signIn / signOut |
-| Test error handling | Simulate errors |
-| Custom render wrapper | Direct provider |
+**Verify with a minimal auth test:**
+
+```tsx
+import { test, renderWithConvexAuth } from "../../convex/test.setup";
+import { screen } from "@testing-library/react";
+import { expect } from "vitest";
+
+test("shows authenticated view", async ({ client }) => {
+  renderWithConvexAuth(<App />, client);
+  expect(await screen.findByText("Welcome back")).toBeInTheDocument();
+});
+```
+
+**Run:**
+```bash
+npx vitest run
+```
+
+If you see `ERR_PACKAGE_PATH_NOT_EXPORTED`, go back to step 2 (vitest plugin is missing).
+
+---
+
+## Usage Reference
 
 ### Authenticated (default)
 
@@ -81,7 +112,6 @@ import { test, renderWithConvexAuth } from "../../convex/test.setup";
 
 test("shows authenticated view", async ({ client }) => {
   renderWithConvexAuth(<App />, client);
-
   expect(await screen.findByText("Welcome back")).toBeInTheDocument();
 });
 ```
@@ -91,7 +121,6 @@ test("shows authenticated view", async ({ client }) => {
 ```tsx
 test("shows sign-in prompt", async ({ client }) => {
   renderWithConvexAuth(<App />, client, { authenticated: false });
-
   expect(await screen.findByText("Please sign in")).toBeInTheDocument();
 });
 ```
@@ -144,14 +173,6 @@ import { ConvexTestAuthProvider } from "feather-testing-convex";
   <YourComponent />
 </ConvexTestAuthProvider>
 ```
-
-## 5. Verify
-
-```bash
-npx vitest run
-```
-
-Auth tests should pass. If you see `ERR_PACKAGE_PATH_NOT_EXPORTED`, the vitest plugin is missing (step 2).
 
 ---
 
