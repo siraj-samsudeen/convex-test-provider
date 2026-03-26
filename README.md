@@ -1,87 +1,35 @@
 # feather-testing-convex
 
-Integration testing for React + Convex apps. Test your React components with **real Convex backend functions** — no mocking, no running a local backend.
+### How do you test a React component that fetches data from Convex?
 
-Built on [convex-test](https://www.npmjs.com/package/convex-test)'s in-memory backend, this library bridges the gap between backend functions and React components so `useQuery`, `useMutation`, `<Authenticated>`, `<Unauthenticated>`, `useConvexAuth()`, and `useAuthActions()` all work in tests.
+| Approach | Tests backend logic | Tests component rendering | Tests the integration | Fast | Code coverage |
+|----------|:---:|:---:|:---:|:---:|:---:|
+| Backend-only (`convex-test`) | ✅ | ❌ | ❌ | ✅ | Partial |
+| Component with mocks (`vi.mock`) | ❌ | ✅ | ❌ | ✅ | Partial |
+| E2E (Playwright) | ✅ | ✅ | ✅ | ❌ | None |
+| **This library** | **✅** | **✅** | **✅** | **✅** | **Full** |
 
-## Philosophy: Integration Tests, Not Isolated Unit Tests
+Say you have a `<TodoList>` component that calls `useQuery(api.todos.list)` to fetch and display todos.
 
-### The Problem with the Popular Pattern
+**If you test the backend alone** (`convex-test`), you can prove the query returns the right data — but you have no idea if your React component actually calls it correctly or renders the result. You've tested half the picture.
 
-Most React + backend tutorials teach you to write tests at two separate layers:
+**If you test the component alone** (mocking `useQuery`), you can prove it renders whatever data you hand it — but the "data" is a mock you wrote. It can drift from what the backend actually returns. Your test passes, your app is broken.
 
-```tsx
-// ❌ Layer 1: Backend-only test (tests the query in isolation)
-test("todos.list returns user's todos", async () => {
-  const t = convexTest(schema, modules);
-  const userId = await t.run(async (ctx) => ctx.db.insert("users", {}));
-  const authed = t.withIdentity({ subject: userId });
-  await t.run(async (ctx) => {
-    await ctx.db.insert("todos", { text: "Buy milk", completed: false, userId });
-  });
-  const todos = await authed.query(api.todos.list, {});
-  expect(todos).toHaveLength(1);
-});
+**If you write a Playwright E2E test**, you get real integration — but it's slow, needs a running backend, and gives you no code coverage.
 
-// ❌ Layer 2: Component test with mocked backend
-vi.mock("convex/react", () => ({
-  useQuery: vi.fn(),
-}));
+There's a gap in the middle: **no fast, in-process way to test a React component against a real Convex backend.**
 
-test("TodoList renders items", () => {
-  vi.mocked(useQuery).mockReturnValue([{ _id: "1", text: "Buy milk", completed: false }]);
-  render(<TodoList />);
-  expect(screen.getByText("Buy milk")).toBeInTheDocument();
-});
-```
+### This library fills that gap
 
-**This gives you 2 tests that overlap in coverage but miss the integration between layers.** The backend test proves the query works. The component test proves rendering works. But neither test proves that the component correctly calls the query and renders the real data.
-
-### What This Library Enables
-
-**One integration test replaces both isolated tests:**
+`feather-testing-convex` wires [convex-test](https://www.npmjs.com/package/convex-test)'s in-memory backend into React's provider tree. Your component calls `useQuery` → hits a real Convex function → gets real data → renders it. All in Vitest. No mocks, no server, full coverage.
 
 ```tsx
-// ✅ One test covers backend + component + data flow
-test("shows seeded data", async ({ client, seed }) => {
+test("shows todos", async ({ client, seed }) => {
   await seed("todos", { text: "Buy milk", completed: false });
   renderWithConvex(<TodoList />, client);
   expect(await screen.findByText("Buy milk")).toBeInTheDocument();
 });
 ```
-
-This single test verifies:
-- ✅ The Convex `todos.list` query function executes correctly
-- ✅ The React component calls `useQuery` with the right arguments
-- ✅ Data flows from the in-memory backend through `useQuery` to the UI
-- ✅ The component renders the data correctly
-
-### When to Still Use Mocks
-
-Integration tests are the default. Use mocks **only** for transient states you can't produce with a real backend:
-
-| State | Approach | Why |
-|-------|----------|-----|
-| Data loaded | **Integration** | Real query returns real data |
-| Empty state | **Integration** | Real query returns `[]` |
-| Loading spinner | **Mock** | Loading is transient — query resolves too fast to observe |
-| Error state | **Mock** | Can't reliably produce errors from real backend |
-| Everything else | **Integration** | Real backend + real React |
-
-### The MECE Principle
-
-Tests should be **Mutually Exclusive, Collectively Exhaustive** — no overlap, no gaps.
-
-```tsx
-function TodoList() {
-  const todos = useQuery(api.todos.list);
-  if (todos === undefined) return <div>Loading...</div>;      // State 1: Mock
-  if (todos.length === 0) return <div>No todos yet</div>;     // State 2: Integration
-  return <ul>{todos.map(t => <li key={t._id}>{t.text}</li>)}</ul>;  // State 3: Integration
-}
-```
-
-**3 tests = 100% coverage. No overlap between integration and mock tests.**
 
 ---
 

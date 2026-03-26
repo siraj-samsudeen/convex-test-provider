@@ -84,3 +84,4 @@ feather-testing-convex/
 | [#1 Helper Functions](https://github.com/siraj-samsudeen/feather-testing-convex/issues/1) | `docs/1-helper-functions/` | Plan ready, awaiting execution |
 | #4 Documentation Improvement | `docs/4-documentation/` | Completed |
 | #5 TanStack Query Support | `docs/5-tanstack-query/` | Completed |
+| #6 README Restructure | `docs/6-readme-restructure/` | Completed |
