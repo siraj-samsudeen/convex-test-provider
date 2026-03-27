@@ -10,13 +10,15 @@ MECE stands for **Mutually Exclusive, Collectively Exhaustive** — a problem-de
 
 **A McKinsey example:** To analyze revenue decline, you decompose into "New Customer Revenue" + "Existing Customer Revenue." Every dollar belongs to exactly one bucket. Nothing is missed. Within each bucket, you analyze from multiple angles — pipeline volume, win rate, deal size — but the *buckets* don't overlap.
 
-**Applied to testing:** Every React component has a finite set of **visual states**. These states are your MECE buckets:
+**Applied to testing, MECE governs the Integration and Mock layers:**
 
-- Each state gets **exactly one test** (Mutually Exclusive — no two tests cover the same state)
-- Every possible state has **a test covering it** (Collectively Exhaustive — no gaps)
-- Within each test, you **assert multiple aspects** of that state — UI rendering, backend state, accessibility, whatever proves the state is correct
+- Each component state belongs to exactly one test approach — Integration OR Mock (Mutually Exclusive)
+- Every possible state has a test covering it — no gaps (Collectively Exhaustive)
+- Within each test, assert multiple aspects of that state — UI text, element visibility, backend state, accessibility role, count
 
 MECE constrains *how many tests you write* (one per state). It does NOT constrain *how many assertions each test contains*. A thorough test of one state is not overlap — it's rigor within a single bucket.
+
+**E2E tests (Playwright) are a deliberate exception to MECE.** E2E tests intentionally cover the same happy paths that integration tests cover — but from a different angle: real browser, real network, real user journey. This overlap is intentional. E2E provides a quality of confidence that in-process tests cannot, especially for critical paths like sign up, checkout, and onboarding. Keep E2E to ~10 smoke tests; they exist outside the MECE decomposition.
 
 **Multiple assertions per test are encouraged.** Each assertion verifies a different aspect of the same state: UI text, element visibility, backend state, accessibility role, count. Splitting these into separate one-assertion tests produces test explosion and is the most common mistake AI agents make.
 
@@ -138,9 +140,10 @@ If you find yourself writing a mock test for a state you *could* produce with `s
 ### The Hierarchy
 
 ```
-E2E (Playwright)     → Happy paths only. Slow, highest confidence.
-Integration (this)   → Happy paths + core failures. Fast, high confidence, bulk of coverage.
-Unit/Mock            → Edge cases only. Fast, low confidence (data can drift).
+E2E (Playwright)     → Exception to MECE: intentionally overlaps integration for real-browser confidence.
+                       Happy paths only. ~10 smoke tests. Slow, highest confidence.
+Integration (this)   → MECE layer: happy paths + core failures. Fast, high confidence, bulk of coverage.
+Unit/Mock            → MECE layer: edge cases only. Fast, low confidence (data can drift).
 ```
 
 ---
@@ -162,7 +165,7 @@ Is this a critical user journey (sign up, checkout, core workflow)?
 
 | State | Approach | Why |
 |-------|----------|-----|
-| Critical user journey | **E2E + Integration** | E2E for confidence, integration for fast CI |
+| Critical user journey | **E2E + Integration** | E2E for real-browser confidence (exception to MECE), integration for fast CI coverage |
 | Data loaded | **Integration** | Real query returns real data |
 | Empty state | **Integration** | Real query returns `[]` |
 | Loading spinner | **Mock** | Transient — query resolves too fast to observe |
@@ -232,9 +235,9 @@ AI coding agents (LLMs) default to the "layers" approach because that's the domi
 
 1. **Backend-only tests** — testing queries/mutations in isolation with `convex-test`
 2. **Component tests with mocks** — mocking `useQuery`/`useMutation` and testing rendering
-3. **Sometimes E2E on top** — Playwright tests that duplicate what integration tests already cover
+3. **E2E tests on top** — Playwright tests for every feature, not just critical journeys
 
-This gives you 3× the test files, overlapping coverage, and **gaps in the integration layer** — the exact place where bugs hide (wrong query arguments, wrong data mapping, wrong component wiring).
+The problem with (1) and (2): they overlap with each other but miss the integration between layers — the exact place where bugs hide. The problem with (3): E2E tests are a valid deliberate exception to MECE (real-browser confidence for critical paths), but agents apply them to every feature instead of ~10 smoke tests for critical journeys.
 
 **The fix:** Delete the backend-only test and the mocked component test. Write one integration test that seeds data, renders the component, and asserts what the user sees. Use the MECE framework to ensure no gaps.
 

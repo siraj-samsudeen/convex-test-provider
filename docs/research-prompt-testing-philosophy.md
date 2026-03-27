@@ -269,9 +269,10 @@ If you find yourself writing a mock test for a state you *could* produce with `s
 ### The Hierarchy
 
 ```
-E2E (Playwright)     → Happy paths only. Slow, highest confidence.
-Integration (this)   → Happy paths + core failures. Fast, high confidence, bulk of coverage.
-Unit/Mock            → Edge cases only. Fast, low confidence (data can drift).
+E2E (Playwright)     → Exception to MECE: intentionally overlaps integration for real-browser confidence.
+                       Happy paths only. ~10 smoke tests. Slow, highest confidence.
+Integration (this)   → MECE layer: happy paths + core failures. Fast, high confidence, bulk of coverage.
+Unit/Mock            → MECE layer: edge cases only. Fast, low confidence (data can drift).
 ```
 
 ---
@@ -363,9 +364,9 @@ AI coding agents (LLMs) default to the "layers" approach because that's the domi
 
 1. **Backend-only tests** — testing queries/mutations in isolation with `convex-test`
 2. **Component tests with mocks** — mocking `useQuery`/`useMutation` and testing rendering
-3. **Sometimes E2E on top** — Playwright tests that duplicate what integration tests already cover
+3. **E2E tests on top** — Playwright tests for every feature, not just critical journeys
 
-This gives you 3× the test files, overlapping coverage, and **gaps in the integration layer** — the exact place where bugs hide (wrong query arguments, wrong data mapping, wrong component wiring).
+The problem with (1) and (2): they overlap with each other but miss the integration between layers — the exact place where bugs hide. The problem with (3): E2E tests are a valid deliberate exception to MECE (real-browser confidence for critical paths), but agents apply them to every feature instead of ~10 smoke tests for critical journeys.
 
 **The fix:** Delete the backend-only test and the mocked component test. Write one integration test that seeds data, renders the component, and asserts what the user sees. Use the MECE framework to ensure no gaps.
 

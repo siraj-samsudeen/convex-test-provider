@@ -1,7 +1,7 @@
 # Instructions for feather-starter-convex: Deduplicate Testing Docs & Tests
 
 The universal testing philosophy now lives in `feather-testing-convex`:
-- **[TESTING-PHILOSOPHY.md](https://github.com/siraj-samsudeen/feather-testing-convex/blob/main/TESTING-PHILOSOPHY.md)** — MECE framework, decision tree, anti-patterns, review checklist, coverage rules
+- **[TESTING-PHILOSOPHY.md](https://github.com/siraj-samsudeen/feather-testing-convex/blob/main/TESTING-PHILOSOPHY.md)** — MECE framework (Integration/Mock layers; E2E is a deliberate exception), decision tree, test matrix, naming convention, anti-patterns, 12-point review checklist, coverage rules
 - **[README.md](https://github.com/siraj-samsudeen/feather-testing-convex/blob/main/README.md)** — API reference, before/after examples, Session DSL, setup guides
 
 The starter repo should keep only **project-specific** testing details and link to the canonical source for philosophy.
@@ -23,8 +23,8 @@ This file currently mixes universal philosophy ("zero-mock approach", integratio
 
   This project follows the [feather-testing-convex testing philosophy](https://github.com/siraj-samsudeen/feather-testing-convex/blob/main/TESTING-PHILOSOPHY.md):
   - **Integration-first**: real backend, no mocks (except loading/error states)
-  - **MECE coverage**: decompose into visual states (buckets), one test per state, multiple assertions per test — no overlap between tests, no gaps
-  - **Review checklist**: 10-point quality checklist for every test file
+  - **MECE coverage**: Integration/Mock layers are MECE buckets — one test per state, no overlap, no gaps. E2E is a deliberate exception: it intentionally overlaps integration tests to provide real-browser confidence for critical user journeys
+  - **Review checklist**: 12-point quality checklist for every test file (includes no snapshots, assertions must verify user-visible behavior)
 
   The rest of this document covers **project-specific** testing patterns.
   ```

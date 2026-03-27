@@ -54,6 +54,8 @@ function TodoList() {
 
 **Integration is the default. Mocks are the exception** — only for transient states (loading spinners) and error states that can't be produced from a real backend. Never mock `useQuery` to return data you could seed instead.
 
+MECE governs the Integration and Mock layers. **E2E (Playwright) is a deliberate exception** — it intentionally overlaps integration tests for critical user journeys (sign up, checkout, onboarding) to provide real-browser confidence. Keep E2E to ~10 smoke tests covering the paths that, if broken, mean the product is broken.
+
 > 📖 **Full guide:** [TESTING-PHILOSOPHY.md](TESTING-PHILOSOPHY.md) — the MECE framework, decision tree, test matrix workflow, naming convention, anti-pattern examples, 12-point review checklist, and coverage rules.
 
 ---

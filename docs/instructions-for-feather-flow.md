@@ -1,7 +1,7 @@
 # Instructions for feather-flow: Thin Down Convex-Specific Skills
 
 The testing philosophy and Convex-specific documentation now live in `feather-testing-convex`:
-- **[TESTING-PHILOSOPHY.md](https://github.com/siraj-samsudeen/feather-testing-convex/blob/main/TESTING-PHILOSOPHY.md)** — MECE framework, decision tree, anti-patterns, 10-point review checklist, coverage rules
+- **[TESTING-PHILOSOPHY.md](https://github.com/siraj-samsudeen/feather-testing-convex/blob/main/TESTING-PHILOSOPHY.md)** — MECE framework (Integration/Mock layers; E2E is a deliberate exception), decision tree, test matrix, naming convention, anti-patterns, 12-point review checklist, coverage rules
 - **[README.md](https://github.com/siraj-samsudeen/feather-testing-convex/blob/main/README.md)** — API reference, before/after examples, Session DSL reference, setup guides
 
 The 3 Convex-specific skills in feather-flow currently duplicate this content. They should be thinned down to **checklists that link to the canonical source** instead of repeating it.
@@ -49,7 +49,7 @@ Review Convex test files against the feather testing philosophy.
 
 ## Checklist
 
-Apply the **10-point review checklist** from [feather-testing-convex/TESTING-PHILOSOPHY.md](https://github.com/siraj-samsudeen/feather-testing-convex/blob/main/TESTING-PHILOSOPHY.md#test-review-checklist):
+Apply the **12-point review checklist** from [feather-testing-convex/TESTING-PHILOSOPHY.md](https://github.com/siraj-samsudeen/feather-testing-convex/blob/main/TESTING-PHILOSOPHY.md#test-review-checklist):
 
 1. No mocked backend for data-display tests
 2. No redundant backend-only tests
@@ -60,7 +60,9 @@ Apply the **10-point review checklist** from [feather-testing-convex/TESTING-PHI
 7. Not asserting stale UI after mutations
 8. Using `findByText` for async data, not `getByText`
 9. Multi-user tests use explicit `userId` with `seed`
-10. MECE test design — decompose into state buckets, one test per state, no overlap, no gaps
+10. MECE test design — Integration/Mock layers are MECE buckets (no overlap); E2E is a deliberate exception that intentionally overlaps integration tests to provide real-browser confidence for happy paths
+11. No snapshot tests — assert specific user-visible values instead
+12. Assertions verify user-visible behavior, not just execution — every test must contain at least one `findByText`, `findByRole`, or `getByText`
 
 See the full checklist with examples and rationale in [TESTING-PHILOSOPHY.md](https://github.com/siraj-samsudeen/feather-testing-convex/blob/main/TESTING-PHILOSOPHY.md#test-review-checklist).
 ```
