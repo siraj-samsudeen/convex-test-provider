@@ -8,7 +8,8 @@
     "testing",
     "react",
     "provider",
-    "convex-test"
+    "convex-test",
+    "tanstack-intent"
   ],
   "repository": {
     "type": "git",
@@ -50,7 +51,9 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "skills",
+    "!skills/_artifacts"
   ],
   "peerDependencies": {
     "@convex-dev/auth": ">=0.0.80",
@@ -96,6 +99,7 @@
     "@convex-dev/auth": "^0.0.90",
     "@convex-dev/react-query": "^0.1.0",
     "@playwright/test": "^1.58.2",
+    "@tanstack/intent": "^0.0.40",
     "@tanstack/react-query": "^5.90.21",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
