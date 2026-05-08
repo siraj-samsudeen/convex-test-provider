@@ -175,6 +175,23 @@ Is this a critical user journey (sign up, checkout, core workflow)?
 
 ---
 
+## Convex `useQuery` State Semantics
+
+`useQuery` returns three distinct values — always check them with strict equality:
+
+```ts
+const data = useQuery(api.x.y);
+if (data === undefined) return <Loading />;  // query in-flight
+if (data === null)      return <Empty />;    // query returned null
+return <View data={data} />;                 // T narrowed
+```
+
+`!data` and `data == null` (loose equals) are bugs: they conflate loading with empty and silently swallow the loading state. Always use `=== undefined` for the loading check.
+
+This maps directly to the MECE decomposition: the loading state (`undefined`) is **always** a Mock test target — it's transient and resolves too fast to observe with a real backend. The `null` state and populated state are both reachable with real data and belong in Integration tests.
+
+---
+
 ## Why Integration-First?
 
 ### The Problem with the Popular Pattern
