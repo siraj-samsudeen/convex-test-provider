@@ -7,20 +7,28 @@ allowed-tools:
 ---
 
 <objective>
-Review one or more Convex test files against the 12-point checklist below. Load the reference files for detail on specific topics. Report every violation with a line reference, a concrete fix, and a severity label.
+Review Convex test code against the 13-point checklist below. Works in two modes:
+- **File mode**: reviews one or more `.test.ts` / `.test.tsx` files on disk
+- **Plan mode**: given a `.md` plan file, extracts embedded test code blocks and reviews those
+
+Load the reference files before reviewing. Report every violation with location, severity, and a concrete fix.
 </objective>
 
 ---
 
-## Step 1 — Identify files to review
+## Step 1 — Identify what to review
 
-If the user named a file or pattern, use that. Otherwise review all test files changed in the current branch:
+**If given a `.md` file (plan mode):** Extract all TypeScript/TSX code blocks that contain `test(` or `it(`. Treat each block as a virtual test file named after its surrounding subtask heading. Review the extracted code — no files need to exist on disk.
+
+**If given `.test.ts` / `.test.tsx` file paths:** Read and review those files directly.
+
+**If given nothing:** Review all test files changed in the current branch:
 
 ```bash
 git diff --name-only main | grep -E "\.test\.(ts|tsx)$"
 ```
 
-If no test files are changed, ask: "Which test file(s) should I review?"
+If that returns nothing, ask: "Which test file(s) or plan file should I review?"
 
 ---
 
@@ -117,7 +125,7 @@ Flag any `onClick={() => ...}` (or similar inline handlers) where no test action
 ## Step 4 — Report
 
 Output a numbered list. For each finding:
-- File and line number
+- Location: file + line number for file mode; subtask heading + line within the code block for plan mode
 - Which checklist point it violates
 - Why it matters in practice (one sentence)
 - Concrete fix (code snippet if helpful)
