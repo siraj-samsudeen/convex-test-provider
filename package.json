@@ -57,6 +57,7 @@
     "dist",
     "skills",
     "!skills/_artifacts",
+    "claude-skills",
     "scripts/install-skills.js"
   ],
   "peerDependencies": {

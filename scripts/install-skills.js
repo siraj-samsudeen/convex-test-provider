@@ -4,7 +4,7 @@ import { dirname, join } from "path";
 import { cpSync, mkdirSync, readdirSync, statSync } from "fs";
 
 const packageRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-const skillsSource = join(packageRoot, "skills");
+const skillsSource = join(packageRoot, "claude-skills");
 const skillsDest = join(process.cwd(), ".claude", "skills");
 
 mkdirSync(skillsDest, { recursive: true });
