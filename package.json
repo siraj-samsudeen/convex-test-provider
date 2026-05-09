@@ -50,10 +50,14 @@
       "default": "./dist/tanstack-query.js"
     }
   },
+  "bin": {
+    "feather-install-skills": "./scripts/install-skills.js"
+  },
   "files": [
     "dist",
     "skills",
-    "!skills/_artifacts"
+    "!skills/_artifacts",
+    "scripts/install-skills.js"
   ],
   "peerDependencies": {
     "@convex-dev/auth": ">=0.0.80",
