@@ -956,21 +956,27 @@ When a Convex function calls `ctx.runQuery()` or `ctx.runMutation()`, the nested
 
 ## Agent Skills
 
-AI coding agent skills for Convex testing are included in [feather-flow](https://github.com/siraj-samsudeen/feather-flow):
+This package ships a `review-convex-tests` skill that checks test files against the 13-point checklist in [TESTING-PHILOSOPHY.md](TESTING-PHILOSOPHY.md).
+
+### Via TanStack Intent (recommended)
+
+Add Intent guidance to your agent config once:
 
 ```bash
-npx feather-flow
+npx @tanstack/intent@latest install
 ```
 
-This installs all feather-flow skills including:
+After that, agents auto-discover and load the skill when working on Convex tests — no manual invocation needed.
 
-| Skill | When to Run | What It Checks |
-|-------|------------|----------------|
-| `/feather:setup-convex-testing` | No test config, or config errors | vitest.config.ts, convex/test.setup.ts, Convex deps |
-| `/feather:add-convex-auth-testing` | Components use auth hooks | vitest plugin, renderWithConvexAuth, @convex-dev/auth |
-| `/feather:review-convex-tests` | After writing any test | 12-point quality checklist for test files |
+### Via slash command (optional)
 
-**Sequence:** setup-react-testing → setup-convex-testing → (if auth) add-convex-auth-testing → write tests → review-convex-tests
+If you want a `/review-convex-tests` slash command in Claude Code:
+
+```bash
+npx feather-install-skills
+```
+
+This copies the skill into `.claude/skills/` so it appears in the Claude Code slash command list.
 
 ---
 
