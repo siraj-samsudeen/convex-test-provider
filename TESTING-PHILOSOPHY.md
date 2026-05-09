@@ -175,6 +175,23 @@ Is this a critical user journey (sign up, checkout, core workflow)?
 
 ---
 
+## Convex `useQuery` State Semantics
+
+`useQuery` returns three distinct values — always check them with strict equality:
+
+```ts
+const data = useQuery(api.x.y);
+if (data === undefined) return <Loading />;  // query in-flight
+if (data === null)      return <Empty />;    // query returned null
+return <View data={data} />;                 // T narrowed
+```
+
+`!data` and `data == null` (loose equals) are bugs: they conflate loading with empty and silently swallow the loading state. Always use `=== undefined` for the loading check.
+
+This maps directly to the MECE decomposition: the loading state (`undefined`) is **always** a Mock test target — it's transient and resolves too fast to observe with a real backend. The `null` state and populated state are both reachable with real data and belong in Integration tests.
+
+---
+
 ## Why Integration-First?
 
 ### The Problem with the Popular Pattern
@@ -486,7 +503,7 @@ An agent told to achieve 100% coverage has two paths: write a meaningful test, o
 
 100% coverage can be gamed — an agent can write `expect(result).toBeDefined()` to execute a line without verifying anything. The safeguard is the review process, not additional rules:
 
-- **`feather:review-convex-tests`** catches weak assertions: `toBeDefined`, `toBeTruthy`, `toMatchSnapshot`, tautological assertions. Every assertion must verify user-visible behavior.
+- **`review-convex-tests`** catches weak assertions: `toBeDefined`, `toBeTruthy`, `toMatchSnapshot`, tautological assertions. Every assertion must verify user-visible behavior.
 - **ESLint** enforces the ban on `toMatchSnapshot()` and `v8 ignore` structurally — these fire automatically without requiring review.
 
 Coverage is the floor. The review process is the ceiling.
@@ -502,7 +519,7 @@ When writing tests for a new component:
 3. **Agent fills the matrix** — one test per row, using the specified approach.
 4. **Use `seed()` for data setup**, `renderWithConvex` for rendering, Session DSL for interactions.
 5. **Assert multiple aspects per test** — every assertion should verify something the user would see or care about. No `toBeDefined`, no snapshots.
-6. **Run `feather:review-convex-tests`** — applies the 12-point checklist before you review.
+6. **Run `review-convex-tests`** — applies the 12-point checklist before you review.
 7. **Check coverage**: run `vitest --coverage` and ensure all lines are hit. If a line is uncovered, either write a test or have a human add `v8 ignore` with justification.
 
 This approach gives you fewer tests with better coverage, faster execution, no false confidence from mocked data, and a test suite small enough to review without fatigue.
