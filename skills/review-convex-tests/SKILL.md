@@ -1,5 +1,5 @@
 ---
-name: feather-review-convex-tests
+name: review-convex-tests
 description: "Review Convex test files against the 12-point checklist in TESTING-PHILOSOPHY.md. Flags weak assertions, wrong test layers, DSL misuse, and coverage shortcuts."
 allowed-tools: Read Bash
 ---
